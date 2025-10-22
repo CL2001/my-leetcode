@@ -25,6 +25,4 @@ Each file starts with:
 ```cpp
 //Problem: https://leetcode.com/problems/two-sum/
 //Difficulty: Easy
-//Time Complexity: O(n)
-//Space Complexity: O(n)
 ```
