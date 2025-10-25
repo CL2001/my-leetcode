@@ -2,34 +2,59 @@
 //Difficulty: Hard
 
 // Basic (O(log(m+n)))
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int nums1_size = nums1.size();
+        int nums2_size = nums2.size();
+        int total_size = nums1_size + nums2_size;
+        int total_middle = (total_size + 1) / 2;
+        bool total_even = total_size % 2 == 0;
 
-[2, 6, 7, 27] [1, 3, 5, 8, 9, 23, 38]
-n1 = 4
-n2 = 7
-n = 11
-left = 6
-high = 4
-mid1 = 2
-mid2 = 4
-r1 = 7
-r2 = 9
-l1 = 6
-l2 = 8
-[1, 2, 3, 5, 6, 7, 8, 9, 27]
+        // Make nums 1 smaller
+        if (nums2_size < nums1_size)
+            return findMedianSortedArrays(nums2, nums1);
+
+        // Set window for nums1
+        int window_left = 0;
+        int window_right = nums1_size;
+
+        while (window_left <= window_right)
+        {
+            // Set the upper bounds of the middle values
+            int mid1_index = (window_right + window_left) / 2;
+            int mid2_index = total_middle - mid1_index;
+
+            // Define the middle values
+            int lmid1 = (mid1_index > 0) ? nums1[mid1_index - 1] : INT_MIN;
+            int rmid1 = (mid1_index < nums1_size) ? nums1[mid1_index] : INT_MAX;
+            int lmid2 = (mid2_index > 0) ? nums2[mid2_index - 1] : INT_MIN;
+            int rmid2 = (mid2_index < nums2_size) ? nums2[mid2_index] : INT_MAX;
 
 
-[1, 3, 5, 7, 9, 24, 26, 38] [2, 4, 10, 14, 16, 25, 27, 30]
-[7, 9, 24] [4, 10, 14] 4 / 6
+            // End conditions (if the 4 values are the 4 middle vals)
+            if (lmid1 <= rmid2 && lmid2 <= rmid1)
+            {
+                if (total_even)
+                {
+                    return (max(lmid1, lmid2) + min(rmid1, rmid2)) / 2.0;
+                }
+                else 
+                {
+                    return max(lmid1, lmid2);
+                }
+            }
+            // No solutions found, adjusting windows
+            if (rmid1 < lmid2)
+            {
+                window_left = mid1_index + 1;
+            }
+            else 
+            {
+                window_right = mid1_index - 1;
+            }
 
-[1, 2, 3, 4, 5, 7, 9, 10, 14, 16, 24, 25, 26, 27, 30, 38]
-
-
-
-[1, 4, 6, 8, 11, 15, 19, 22, 25, 28, 31, 33, 37, 40, 43, 46, 49, 51, 54, 58] [2, 3, 5, 7, 9, 10, 12, 13, 14, 16, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30, 32, 34, 35, 36, 38, 39, 41, 42, 44, 45, 47, 48, 50, 52, 53, 55, 56, 57, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]
-28 60
-
-[28, 31, 33, 37, 40, 43, 46, 49, 51, 54, 58] [27, 29, 30, 32, 34, 35, 36, 38, 39, 41, 42, 44, 45, 47, 48, 50, 52, 53, 55, 56, 57, 59, 60] 26 / 41 => (41 - 26) / 2 = 7
-28 34
-
-
-
+        }
+        return 0.0;
+    }
+};
