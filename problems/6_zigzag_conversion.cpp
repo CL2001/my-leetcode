@@ -1,3 +1,8 @@
+//Problem: https://leetcode.com/problems/zigzag-conversion/
+//Difficulty: Medium
+
+// Basic (O(n))
+
 class Solution {
 public:
     string convert(string s, int numRows) {
